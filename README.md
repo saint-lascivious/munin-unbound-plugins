@@ -45,15 +45,17 @@ sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_mu
 Or let "munin-node-configure --shell | bash" do it for you.
 
 # Configuration
+Configuration should not be required when using a default configuration
+
 * Sample setup for '/etc/munin/plugin-conf.d/plugins.conf':
 ```
 [unbound*]
-user root
-env.statefile /usr/local/var/munin/plugin-state/unbound-state
-env.unbound_conf /usr/local/etc/unbound/unbound.conf
-env.unbound_control /usr/local/sbin/unbound-control
-env.spoof_warn 1000
-env.spoof_crit 100000
+    user root
+    env.statefile /var/lib/munin-node/plugin-state/unbound-state
+    env.unbound_conf /etc/unbound/unbound.conf
+    env.unbound_control /usr/sbin/unbound-control
+    env.spoof_warn 100
+    env.spoof_crit 1000
 ```
 
 ## Contact

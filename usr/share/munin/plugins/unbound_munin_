@@ -21,12 +21,13 @@
 #
 # You can set them in your munin/plugin-conf.d/plugins.conf file
 # with:
-# [unbound*]
-# user root
-# env.unbound_conf /usr/local/etc/unbound/unbound.conf
-# env.unbound_control /usr/local/sbin/unbound-control
-# env.spoof_warn 1000
-# env.spoof_crit 100000
+#[unbound*]
+#    user root
+#    env.statefile /var/lib/munin-node/plugin-state/unbound-state
+#    env.unbound_conf /etc/unbound/unbound.conf
+#    env.unbound_control /usr/sbin/unbound-control
+#    env.spoof_warn 100
+#    env.spoof_crit 1000
 #
 # This plugin can create different graphs depending on what name
 # you link it as (with ln -s) into the plugins directory
@@ -63,11 +64,12 @@ System with unbound daemon.
 =head1 CONFIGURATION
 
   [unbound*]
-  user root
-  env.unbound_conf /usr/local/etc/unbound/unbound.conf
-  env.unbound_control /usr/local/sbin/unbound-control
-  env.spoof_warn 1000
-  env.spoof_crit 100000
+      user root
+      env.statefile /var/lib/munin-node/plugin-state/unbound-state
+      env.unbound_conf /etc/unbound/unbound.conf
+      env.unbound_control /usr/sbin/unbound-control
+      env.spoof_warn 100
+      env.spoof_crit 1000
 
 Use the .env settings to override the defaults.
 
