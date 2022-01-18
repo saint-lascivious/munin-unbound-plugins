@@ -66,7 +66,6 @@ The default configuration should Just Work. If you have a non-standard configura
 ```
 [unbound*]
     user root
-    env.statefile /var/lib/munin-node/plugin-state/unbound-state
     env.unbound_conf /etc/unbound/unbound.conf
     env.unbound_control /usr/sbin/unbound-control
     env.spoof_warn 100
