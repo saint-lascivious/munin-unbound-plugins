@@ -2,6 +2,19 @@
 
 Munin plugins for monitoring [Unbound](https://github.com/NLnetLabs/unbound)
 
+## Related projects
+* [lighttpd-external-munin-proxy](https://github.com/saint-lascivious/lighttpd-external-munin-proxy)
+
+lighttpd external.conf for Munin webserver proxy
+
+* [Munin](https://github.com/munin-monitoring/munin)
+
+Main repository for munin master / node / plugins
+
+* [Unbound](https://github.com/NLnetLabs/unbound)
+
+Unbound is a validating, recursive, caching DNS resolver.
+
 ## Install Munin
 * See the instructions in my [lighttpd-external-munin-proxy](https://github.com/saint-lascivious/lighttpd-external-munin-proxy) repository
 
