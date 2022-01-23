@@ -21,12 +21,12 @@
 #
 # You can set them in your munin/plugin-conf.d/plugins.conf file
 # with:
-#[unbound*]
-#    user root
-#    env.unbound_conf /etc/unbound/unbound.conf
-#    env.unbound_control /usr/sbin/unbound-control
-#    env.spoof_warn 100
-#    env.spoof_crit 1000
+# [unbound*]
+#     user root
+#     env.unbound_conf /etc/unbound/unbound.conf
+#     env.unbound_control /usr/sbin/unbound-control
+#     env.spoof_warn 100
+#     env.spoof_crit 1000
 #
 # This plugin can create different graphs depending on what name
 # you link it as (with ln -s) into the plugins directory
@@ -97,10 +97,10 @@ BSD
 
 state="${MUNIN_PLUGSTATE}/unbound.state"
 seentags="${MUNIN_PLUGSTATE}/unbound-seentags.state"
-conf=${unbound_conf:-/usr/local/etc/unbound/unbound.conf}
-ctrl=${unbound_control:-/usr/local/sbin/unbound-control}
-warn=${spoof_warn:-1000}
-crit=${spoof_crit:-100000}
+conf=${unbound_conf:-/etc/unbound/unbound.conf}
+ctrl=${unbound_control:-/usr/sbin/unbound-control}
+warn=${spoof_warn:-100}
+crit=${spoof_crit:-1000}
 lock=$state.lock
 
 # number of seconds between polling attempts.
@@ -239,7 +239,7 @@ if test "$1" = "config" ; then
 	fi
 	case $id in
 	hits)
-		echo "graph_title Unbound DNS traffic and cache hits"
+		echo "graph_title Unbound DNS Traffic & Cache Hits"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
@@ -263,7 +263,7 @@ if test "$1" = "config" ; then
 		echo "graph_info DNS queries to the recursive resolver. The unwanted replies could be innocent duplicate packets, late replies, or spoof threats."
 		;;
 	queue)
-		echo "graph_title Unbound requestlist size"
+		echo "graph_title Unbound Requestlist Size"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel number of queries"
 		echo "graph_scale no"
@@ -275,7 +275,7 @@ if test "$1" = "config" ; then
 		echo "graph_info The queries that did not hit the cache and need recursion service take up space in the requestlist. If there are too many queries, first queries get overwritten, and at last resort dropped."
 		;;
 	memory)
-		echo "graph_title Unbound memory usage"
+		echo "graph_title Unbound Memory Usage"
 		echo "graph_args --base 1024 -l 0"
 		echo "graph_vlabel memory used in bytes"
 		echo "graph_category unbound"
@@ -290,7 +290,7 @@ if test "$1" = "config" ; then
 		echo "graph_info The memory used by unbound."
 		;;
 	by_type)
-		echo "graph_title Unbound DNS queries by type"
+		echo "graph_title Unbound DNS Queries By Type"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
@@ -302,7 +302,7 @@ if test "$1" = "config" ; then
 		echo "graph_info queries by DNS RR type queried for"
 		;;
 	by_class)
-		echo "graph_title Unbound DNS queries by class"
+		echo "graph_title Unbound DNS Queries By Class"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
@@ -314,7 +314,7 @@ if test "$1" = "config" ; then
 		echo "graph_info queries by DNS RR class queried for."
 		;;
 	by_opcode)
-		echo "graph_title Unbound DNS queries by opcode"
+		echo "graph_title Unbound DNS Queries By Opcode"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
@@ -326,7 +326,7 @@ if test "$1" = "config" ; then
 		echo "graph_info queries by opcode in the query packet."
 		;;
 	by_rcode)
-		echo "graph_title Unbound DNS answers by return code"
+		echo "graph_title Unbound DNS Answers By Return Code"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel answer packets / \${graph_period}"
 		echo "graph_scale no"
@@ -341,7 +341,7 @@ if test "$1" = "config" ; then
 		echo "graph_info answers sorted by return value. rrsets bogus is the number of rrsets marked bogus per \${graph_period} by the validator"
 		;;
 	by_flags)
-		echo "graph_title Unbound DNS incoming queries by flags"
+		echo "graph_title Unbound DNS Incoming Queries By Flags"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
@@ -359,7 +359,7 @@ if test "$1" = "config" ; then
 		echo "graph_info This graphs plots the flags inside incoming queries. For example, if QR, AA, TC, RA, Z flags are set, the query can be rejected. RD, AD, CD and DO are legitimately set by some software."
 		;;
 	histogram)
-		echo "graph_title Unbound DNS histogram of reply time"
+		echo "graph_title Unbound DNS Histogram Of Reply Time"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
