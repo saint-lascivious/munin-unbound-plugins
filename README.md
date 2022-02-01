@@ -37,19 +37,13 @@ sudo chmod a+x /usr/share/munin/plugins/unbound_munin_*
 
 * Create any/all desired symbolic links
 ```
-sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_hits
+sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_by_class
 ```
 ```
-sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_queue
-```
-```
-sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_memory
+sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_by_flags
 ```
 ```
 sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_by_type
-```
-```
-sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_by_class
 ```
 ```
 sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_by_opcode
@@ -58,10 +52,16 @@ sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_mu
 sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_by_rcode
 ```
 ```
-sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_by_flags
-```
-```
 sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_histogram
+```
+```
+sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_hits
+```
+```
+sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_memory
+```
+```
+sudo ln -s /usr/share/munin/plugins/unbound_munin_ /etc/munin/plugins/unbound_munin_queue
 ```
 
 * Restart Munin services
@@ -124,7 +124,10 @@ Munin monitoring plugins for Pi-hole
 
 Main repository for munin master / node / plugins
 
+* [Pi-hole](https://github.com/pi-hole/pi-hole)
+
+A black hole for Internet advertisements
+
 * [Unbound](https://github.com/NLnetLabs/unbound)
 
 Unbound is a validating, recursive, caching DNS resolver.
-
