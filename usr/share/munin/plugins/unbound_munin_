@@ -239,11 +239,11 @@ if test "$1" = "config" ; then
 	fi
 	case $id in
 	hits)
-		echo "graph_title Unbound DNS Traffic & Cache Hits"
+		echo "graph_title Unbound DNS traffic and cache hits"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
-		echo "graph_category unbound"
+		echo "graph_category dns"
 		for x in `grep "^thread[0-9][0-9]*\.num\.queries=" $state |
 			sed -e 's/=.*//'`; do
 			exist_config $x "queries handled by `basename $x .num.queries`"
@@ -263,11 +263,11 @@ if test "$1" = "config" ; then
 		echo "graph_info DNS queries to the recursive resolver. The unwanted replies could be innocent duplicate packets, late replies, or spoof threats."
 		;;
 	queue)
-		echo "graph_title Unbound Requestlist Size"
+		echo "graph_title Unbound requestlist size"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel number of queries"
 		echo "graph_scale no"
-		echo "graph_category unbound"
+		echo "graph_category dns"
 		p_config "total.requestlist.avg" "Average size of queue on insert" "GAUGE"
 		p_config "total.requestlist.max" "Max size of queue (in 5 min)" "GAUGE"
 		p_config "total.requestlist.overwritten" "Number of queries replaced by new ones" "GAUGE"
@@ -275,10 +275,10 @@ if test "$1" = "config" ; then
 		echo "graph_info The queries that did not hit the cache and need recursion service take up space in the requestlist. If there are too many queries, first queries get overwritten, and at last resort dropped."
 		;;
 	memory)
-		echo "graph_title Unbound Memory Usage"
+		echo "graph_title Unbound memory usage"
 		echo "graph_args --base 1024 -l 0"
 		echo "graph_vlabel memory used in bytes"
-		echo "graph_category unbound"
+		echo "graph_category dns"
 		p_config "mem.cache.rrset" "RRset cache memory" "GAUGE"
 		p_config "mem.cache.message" "Message cache memory" "GAUGE"
 		p_config "mem.mod.iterator" "Iterator module memory" "GAUGE"
@@ -290,11 +290,11 @@ if test "$1" = "config" ; then
 		echo "graph_info The memory used by unbound."
 		;;
 	by_type)
-		echo "graph_title Unbound DNS Queries By Type"
+		echo "graph_title Unbound DNS queries by type"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
-		echo "graph_category unbound"
+		echo "graph_category dns"
 		for nm in `grep "^num.query.type" $seentags`; do
 			tp=`echo $nm | sed -e s/num.query.type.//`
 			p_config "$nm" "$tp" "ABSOLUTE"
@@ -302,11 +302,11 @@ if test "$1" = "config" ; then
 		echo "graph_info queries by DNS RR type queried for"
 		;;
 	by_class)
-		echo "graph_title Unbound DNS Queries By Class"
+		echo "graph_title Unbound DNS queries by class"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
-		echo "graph_category unbound"
+		echo "graph_category dns"
 		for nm in `grep "^num.query.class" $seentags`; do
 			tp=`echo $nm | sed -e s/num.query.class.//`
 			p_config "$nm" "$tp" "ABSOLUTE"
@@ -314,11 +314,11 @@ if test "$1" = "config" ; then
 		echo "graph_info queries by DNS RR class queried for."
 		;;
 	by_opcode)
-		echo "graph_title Unbound DNS Queries By Opcode"
+		echo "graph_title Unbound DNS queries by opcode"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
-		echo "graph_category unbound"
+		echo "graph_category dns"
 		for nm in `grep "^num.query.opcode" $seentags`; do
 			tp=`echo $nm | sed -e s/num.query.opcode.//`
 			p_config "$nm" "$tp" "ABSOLUTE"
@@ -326,11 +326,11 @@ if test "$1" = "config" ; then
 		echo "graph_info queries by opcode in the query packet."
 		;;
 	by_rcode)
-		echo "graph_title Unbound DNS Answers By Return Code"
+		echo "graph_title Unbound DNS answers by return code"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel answer packets / \${graph_period}"
 		echo "graph_scale no"
-		echo "graph_category unbound"
+		echo "graph_category dns"
 		for nm in `grep "^num.answer.rcode" $seentags`; do
 			tp=`echo $nm | sed -e s/num.answer.rcode.//`
 			p_config "$nm" "$tp" "ABSOLUTE"
@@ -341,11 +341,11 @@ if test "$1" = "config" ; then
 		echo "graph_info answers sorted by return value. rrsets bogus is the number of rrsets marked bogus per \${graph_period} by the validator"
 		;;
 	by_flags)
-		echo "graph_title Unbound DNS Incoming Queries By Flags"
+		echo "graph_title Unbound DNS incoming queries by flags"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
-		echo "graph_category unbound"
+		echo "graph_category dns"
 		p_config "num.query.flags.QR" "QR (query reply) flag" "ABSOLUTE"
 		p_config "num.query.flags.AA" "AA (auth answer) flag" "ABSOLUTE"
 		p_config "num.query.flags.TC" "TC (truncated) flag" "ABSOLUTE"
@@ -359,11 +359,11 @@ if test "$1" = "config" ; then
 		echo "graph_info This graphs plots the flags inside incoming queries. For example, if QR, AA, TC, RA, Z flags are set, the query can be rejected. RD, AD, CD and DO are legitimately set by some software."
 		;;
 	histogram)
-		echo "graph_title Unbound DNS Histogram Of Reply Time"
+		echo "graph_title Unbound DNS histogram of reply time"
 		echo "graph_args --base 1000 -l 0"
 		echo "graph_vlabel queries / \${graph_period}"
 		echo "graph_scale no"
-		echo "graph_category unbound"
+		echo "graph_category dns"
 		echo hcache.label "cache hits"
 		echo hcache.min 0
 		echo hcache.type ABSOLUTE
