@@ -49,13 +49,19 @@ install_dependencies() {
 configure_unbound() {
     if [[ -x "$(command -v unbound-control)" ]]; then
         if [[ -x "$(command -v unbound-control-setup)" ]]; then
+            unbound-control-setup
             setup_query="$(unbound-control-setup | grep "Setup success")"
             if [[ -n "$setup_query" ]]; then
                 if [[ -d "$unbound_config_dir" ]]; then
                     if [[ -f "$unbound_config_dir"/remote-control.conf ]]; then
                         mv "$unbound_config_dir"/remote-control.conf "$unbound_config_dir"/remote-control.conf.bak || return
                     else
-                        wget -q --show-progress "$unbound_config_repo"/configs/remote-control.conf -P "$unbound_config_dir"
+                        if [[ -x "$(command -v wget)" ]]; then
+                            wget -q --show-progress "$unbound_config_repo"/configs/remote-control.conf -P "$unbound_config_dir"
+                        else
+                            echo -e " * \e[31;1m[ERROR]\e[0m The required package 'wget' was not found"
+                            exit 1
+                        fi
                     fi
                 else
                     echo -e " * \e[31;1m[ERROR]\e[0m No Unbound configuration directory found at"
@@ -83,7 +89,12 @@ configure_proxy() {
         else
             rm "$proxy_config_dir"/external.conf || return
         fi
-        wget -q --show-progress "$proxy_repo"/etc/lighttpd/external.conf -P "$proxy_config_dir"
+        if [[ -x "$(command -v wget)" ]]; then
+            wget -q --show-progress "$proxy_repo"/etc/lighttpd/external.conf -P "$proxy_config_dir"
+        else
+            echo -e " * \e[31;1m[ERROR]\e[0m The required package 'wget' was not found"
+            exit 1
+        fi
     else
         echo -e " * \e[31;1m[ERROR]\e[0m No Lighttpd configuration directory found at"
         echo "$proxy_config_dir"
@@ -115,8 +126,10 @@ remove_existing() {
         fi
     fi
     if [[ -d "$node_plugin_dir" ]]; then
-        for plugin_id in "$node_plugin_dir"/unbound_*; do
-            rm "$node_plugin_dir"/unbound_"$plugin_id" || return
+        for plugin_id in $plugin_list; do
+            if [[ -f "$node_plugin_dir"/unbound_munin_"$plugin_id" ]]; then
+                rm "$node_plugin_dir"/unbound_munin_"$plugin_id" || return
+            fi
         done
     fi
 }
@@ -124,7 +137,12 @@ remove_existing() {
 install_plugins() {
     if [[ -d "$munin_plugin_dir" ]]; then
         if [[ -d "$node_plugin_dir" ]]; then
-            wget -q --show-progress "$plugin_repo"/usr/share/munin/plugins/unbound_munin_ -P "$munin_plugin_dir" || return
+            if [[ -x "$(command -v wget)" ]]; then
+                wget -q --show-progress "$plugin_repo"/usr/share/munin/plugins/unbound_munin_ -P "$munin_plugin_dir" || return
+            else
+                echo -e " * \e[31;1m[ERROR]\e[0m The required package 'wget' was not found"
+                exit 1
+            fi
             chmod +x "$munin_plugin_dir"/unbound_munin_ || return
             for plugin_id in $plugin_list; do
                 ln -s "$munin_plugin_dir"/unbound_"$plugin_id" "$node_plugin_dir"/unbound_"$plugin_id" || return
@@ -144,7 +162,12 @@ install_plugins() {
 configure_plugins() {
     if [[ -d "$plugin_config_dir" ]]; then
         if [[ ! -f  "$plugin_config_dir/unbound" ]]; then
-            wget -q --show-progress "$plugin_repo"/etc/munin/plugin-conf.d/unbound -P "$plugin_config_dir"
+            if [[ -x "$(command -v wget)" ]]; then
+                wget -q --show-progress "$plugin_repo"/etc/munin/plugin-conf.d/unbound -P "$plugin_config_dir"
+            else
+                echo -e " * \e[31;1m[ERROR]\e[0m The required package 'wget' was not found"
+                exit 1
+            fi
         fi
     else
         echo -e " * \e[31;1m[ERROR]\e[0m No Munin plugin configuration directory found at"
