@@ -4,6 +4,9 @@ Munin plugins for monitoring [Unbound](https://github.com/NLnetLabs/unbound)
 
 ## Automated Installation
 Automated installation script for Debian/Ubuntu derivatives
+
+Note: Automated installation is in its infacy right now and not particularly well tested
+
 * Download the munin-pihole-plugins script
 ```
 wget https://raw.githubusercontent.com/saint-lascivious/unbound-pihole-plugins/master/script/unbound-pihole-plugins
