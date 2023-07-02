@@ -4,29 +4,35 @@
 # To install copy this to /usr/local/share/munin/plugins/unbound_munin_
 # and use munin-node-configure (--suggest, --shell).
 #
-# (C) 2008 W.C.A. Wijngaards.  BSD Licensed.
+# (C) 2008 W.C.A. Wijngaards.
+# (C) 2023 Hayden Pearce.
 #
-# To install; enable statistics and unbound-control in unbound.conf
-#   server:     extended-statistics: yes
-#           statistics-cumulative: no
-#           statistics-interval: 0
-#   remote-control: control-enable: yes
+# BSD Licensed.
+#
+# To install; enable statistics and unbound-control in unbound.conf with:
+#
+# server:
+#     extended-statistics: yes
+#     statistics-cumulative: no
+#     statistics-interval: 0
+#     remote-control: control-enable: yes
+#
 # Run the command unbound-control-setup to generate the key files.
 #
 # Environment variables for this script
 #   unbound_conf    - where the unbound.conf file is located.
 #   unbound_control - where to find unbound-control executable.
-#   spoof_warn  - what level to warn about spoofing
-#   spoof_crit  - what level to crit about spoofing
+#   spoof_warn      - what level to warn about spoofing
+#   spoof_crit      - what level to crit about spoofing
 #
-# You can set them in your munin/plugin-conf.d/plugins.conf file
-# with:
+# You can set them in your munin/plugin-conf.d/plugins.conf file with:
+#
 # [unbound*]
 #     user root
 #     env.unbound_conf /etc/unbound/unbound.conf
 #     env.unbound_control /usr/sbin/unbound-control
-#     env.spoof_warn 100
-#     env.spoof_crit 1000
+#     env.spoof_warn 0:50
+#     env.spoof_crit 100
 #
 # This plugin can create different graphs depending on what name
 # you link it as (with ln -s) into the plugins directory
@@ -34,8 +40,8 @@
 # If you are only a casual user, the _hits and _by_type are most interesting,
 # possibly followed by _by_rcode.
 #
-#   unbound_munin_hits  - base volume, cache hits, unwanted traffic
-#   unbound_munin_queue - to monitor the internal requestlist
+#   unbound_munin_hits      - base volume, cache hits, unwanted traffic
+#   unbound_munin_queue     - to monitor the internal request list
 #   unbound_munin_memory    - memory usage
 #   unbound_munin_by_type   - incoming queries by type
 #   unbound_munin_by_class  - incoming queries by class
@@ -48,7 +54,7 @@
 # munin-config:  (originally contrib family but munin-node-configure ignores it)
 #
 #%# family=auto
-#%# capabilities=autoconf suggest
+#%# capabilities=autoconf dirtyconfig suggest
 
 # POD documentation
 : <<=cut
@@ -62,12 +68,12 @@ System with unbound daemon.
 
 =head1 CONFIGURATION
 
-  [unbound*]
-      user root
-      env.unbound_conf /etc/unbound/unbound.conf
-      env.unbound_control /usr/sbin/unbound-control
-      env.spoof_warn 100
-      env.spoof_crit 1000
+[unbound*]
+    user root
+    env.unbound_conf /etc/unbound/unbound.conf
+    env.unbound_control /usr/sbin/unbound-control
+    env.spoof_warn 0:50
+    env.spoof_crit 100
 
 Use the .env settings to override the defaults.
 
@@ -75,8 +81,9 @@ Use the .env settings to override the defaults.
 
 Can be used to present different graphs. Use ln -s for that name in
 the plugins directory to enable the graph.
-unbound_munin_hits  - base volume, cache hits, unwanted traffic
-unbound_munin_queue - to monitor the internal requestlist
+
+unbound_munin_hits      - base volume, cache hits, unwanted traffic
+unbound_munin_queue     - to monitor the internal request list
 unbound_munin_memory    - memory usage
 unbound_munin_by_type   - incoming queries by type
 unbound_munin_by_class  - incoming queries by class
@@ -88,6 +95,7 @@ unbound_munin_histogram - histogram of query resolving times
 =head1 AUTHOR
 
 Copyright 2008 W.C.A. Wijngaards
+Copyright 2023 Hayden Pearce
 
 =head1 LICENSE
 
@@ -99,8 +107,8 @@ state="${MUNIN_PLUGSTATE}/unbound.state"
 seentags="${MUNIN_PLUGSTATE}/unbound-seentags.state"
 conf=${unbound_conf:-/etc/unbound/unbound.conf}
 ctrl=${unbound_control:-/usr/sbin/unbound-control}
-warn=${spoof_warn:-100}
-crit=${spoof_crit:-1000}
+warn=${spoof_warn:-"0:50"}
+crit=${spoof_crit:-"100"}
 lock=$state.lock
 
 # number of seconds between polling attempts.
@@ -192,9 +200,7 @@ if test "$1" = "autoconf" ; then
         exit 0
     fi
     echo yes
-        if test "$MUNIN_CAP_DIRTYCONFIG" != "1" ; then
-        exit 0
-        fi
+    exit 0
 fi
 
 if test "$1" = "suggest" ; then
@@ -421,8 +427,9 @@ if test "$1" = "config" ; then
         echo "graph_info Histogram of the reply times for queries."
         ;;
     esac
-
-    exit 0
+    if test "$MUNIN_CAP_DIRTYCONFIG" != "1" ; then
+        exit 0
+    fi
 fi
 
 # do the stats itself
@@ -449,7 +456,6 @@ print_value_line ( ) {
     value="`echo $2 | sed -e 's/^.*=//'`"
     echo "$mn.value" $value
 }
-
 
 case $id in
 hits)

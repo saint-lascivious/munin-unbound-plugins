@@ -2,5 +2,5 @@
     user root
     env.unbound_conf /etc/unbound/unbound.conf
     env.unbound_control /usr/sbin/unbound-control
-    env.spoof_warn 100
-    env.spoof_crit 1000
+    env.spoof_warn 0:50
+    env.spoof_crit 100
